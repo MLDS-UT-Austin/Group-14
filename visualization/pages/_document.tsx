@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <title>DataHack '24 Results</title>
       </Head>
-      <body className="prose max-w-lg p-x-auto">
+      <body className="prose max-w-2xl p-x-auto mx-16 mt-5">
         <Main />
         <NextScript />
       </body>

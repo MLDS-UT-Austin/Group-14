@@ -1,10 +1,110 @@
-import Test from '@/components/Test'
-import AllData from "@/components/AllDataDistributions"
- 
-# Our Results
+import AllData from "@/components/AllDataDistributions";
+import AverageDataVisual from "@/components/Averages";
+import BoxPlot from "@/components/BoxPlots";
+import Heatmap from "@/components/Heatmap";
 
-## Distributions of Data
+# Data Hack 24 Results
 
-In order to figure out where to start with our code, we visualized our data as distributions
+## The problem
+
+We were given a lot of data to start with, and it's hard to come up with trends by just
+looking at the raw data. As a result, we decided to visualize the data using `matplotlib`.
+
+Below are the strategies we took for visualizing the data:
+
+## Visualization
+
+### Trends of Averages over the Years
+
+<AverageDataVisual />
+
+As you can see, however, this data is _not_ very exciting. There's not much of a trend, and averages seem to stay
+constant even as time goes on.
+
+### Distributions of Data
+
+As a result, in order to figure out where to start with our code, we visualized our data as distributions.
 
 <AllData />
+
+This gave us a lot of information on how certain aspects affected the game, like (obviously and expectedly)
+how increasing age led to decreasing players of that age--this is important in knowing who to pick, because we wouldn't
+want to pick someone too old.
+
+### Box Plots
+
+Box plots offer a lot of detail into how outliers are distributed for a dataset. In this case, they were essential
+for us in limiting what data points we use. For example, `BB` and `SO` have a high number of outliers. Though we did
+end up using `SO` in our final model, we dropped `BB` because it offered no insight into the strength of a player.
+
+<BoxPlot />
+
+### Heatmap
+
+This was a huge part in us picking certain fields to train our models. The heatmap provides a matrix of correlations.
+
+Essentially, it provides a decimal value between -1 and 1 representing how correlated two variables are. Machine Learning
+models base predictions off of generalized trends that become more statistically obvious the more steps the model is trained.
+
+In this case, we wanted to rid the model of the work of weighing the less correlated fields less, because we had limited data to work with
+
+<Heatmap />
+
+## Results
+
+We used a variety of models and saw widely different results.
+
+### Linear Regression
+
+Linear regression is the most basic model, it simply attempts to minimize the error between a straight line
+and a dataset. This method doesn't work too well when working with non-linear datasets or data that has multiple variables
+
+With our Linear Regression model, we were able to achieve an R-squared value of 0.94, which is very high correlation,
+but we had a mean-squared error of over 50.
+
+Our output for the top 5 players with this model was:
+
+```
+Top 5 players with the highest predicted hits:
+                                         Name  Predicted_H
+Name
+Eric Cyr            2248             Eric Cyr   245.211102
+Dusty Ryan          2511           Dusty Ryan   236.602747
+Steve Gajkowski     2670      Steve Gajkowski   233.637139
+Bill Ortega         1909          Bill Ortega   232.175259
+Scott Alexander     1842      Scott Alexander   231.916246
+```
+
+For this reason, we moved to Random Forest Regression.
+
+### Random Forest Regression
+
+Random Forests pick random samples from the dataset, generate a "decision tree", and then calculate the mean of those
+trees to find the best option. This works much better when working with non-linear data that might be affected
+by changing values at different rates.
+
+We were able to get an R squared figure of `0.96`.
+
+Our mean squared error with this model was below 50.
+
+Our output for the top 5 predictions were:
+
+```
+Top 5 players with the highest predicted hits:
+                                     Name  Predicted_H
+Name
+Eric Cyr          2248           Eric Cyr       248.25
+Scott Alexander   1580    Scott Alexander       240.20
+Dusty Ryan        2511         Dusty Ryan       236.53
+Danny Young       2500        Danny Young       233.88
+Severino Gonzalez 1587  Severino Gonzalez       232.37
+```
+
+### XG Boost Regression
+
+XG Boost regression takes on a very simple method to Random Forests, except instead of producing decision trees
+independently and then averaging them at every step, we use the previous values.
+
+This is much more efficient for non-linear values.
+
+This model is much slower to train and write code for, so we were unable to completely finish it, but it is a place for exploration in the future.

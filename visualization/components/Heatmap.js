@@ -1,4 +1,6 @@
-
+function HeatmapData() {
+  return {
+    __html: `
 
 <style>
 
@@ -40,4 +42,10 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
             })
          });
 }
-</script>
+</script>`,
+  };
+}
+
+export default function Heatmap() {
+  return <div dangerouslySetInnerHTML={HeatmapData()}></div>;
+}
